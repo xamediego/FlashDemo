@@ -48,33 +48,21 @@ public class DeckViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        /*want to find way to not have to use these and not have to use something weird for creating the decklines
+            maybe initialize the decklines when the maincontroller initializes
+         */
+        lineList.clear();
+        deckList.getChildren().clear();
+
         createDeckLines();
     }
 
-    /*
-    Creates or refreshes Decklines
-    Maybe there is a better way to put this disgusting if else statement together
-    but right now needs to be left like this otherwise causes a duplicate child error
-     */
     public void createDeckLines(){
 
-        if(lineList.isEmpty()) {
-            deckRepository.findAll().forEach(deck -> lineList.add(new DeckLine(deck.getName()
-                    , deckRepository.getCardStatusSize(deck.getName(), "NewStudy")
-                    , deckRepository.getCardStatusDateLessSize(deck.getName(), "review", date),
-                    deck.getId())));
-        }else{
-           for(Deck d : deckRepository.findAll()){
-                for(DeckLine line : lineList){
-                    if(!d.getId().equals(line.getId())){
-                        lineList.add(new DeckLine(d.getName()
-                                , deckRepository.getCardStatusSize(d.getName(), "NewStudy")
-                                , deckRepository.getCardStatusDateLessSize(d.getName(), "review", date),
-                                d.getId()));
-                    }
-                }
-            }
-        }
+        deckRepository.findAll().forEach(deck -> lineList.add(new DeckLine(deck.getName()
+                , deckRepository.getCardStatusSize(deck.getName(), "NewStudy")
+                , deckRepository.getCardStatusDateLessSize(deck.getName(), "review", date),
+                deck.getId())));
 
         lineList.forEach(l -> deckList.getChildren().add(l.getDeckBox()));
 
