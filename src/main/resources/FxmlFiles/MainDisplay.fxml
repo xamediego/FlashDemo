@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="mainBox" maxHeight="500.0" maxWidth="750.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mai.flash.Controllers.MainController">
+   <children>
+      <HBox fx:id="displayBox" prefHeight="500.0" prefWidth="750.0" VBox.vgrow="ALWAYS">
+         <children>
+            <VBox prefHeight="500.0" prefWidth="175.0" HBox.hgrow="NEVER">
+               <children>
+                  <Pane prefHeight="162.0" prefWidth="175.0" VBox.vgrow="NEVER">
+                     <children>
+                        <Label layoutX="43.0" layoutY="12.0" text="FlashCards!">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Button mnemonicParsing="false" onAction="#getDeckView" prefHeight="40.0" prefWidth="175.0" text="Decks" VBox.vgrow="NEVER" />
+                  <Button mnemonicParsing="false" onAction="#getDataView" prefHeight="40.0" prefWidth="175.0" text="Statistics" VBox.vgrow="NEVER" />
+                  <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="175.0" text="Import" VBox.vgrow="NEVER" />
+                  <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="175.0" text="Settings" VBox.vgrow="NEVER" />
+                  <Pane prefHeight="200.0" prefWidth="175.0" VBox.vgrow="ALWAYS" />
+                  <HBox prefHeight="27.0" prefWidth="175.0">
+                     <children>
+                        <Label>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="4.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+            </VBox>
+            <fx:include source="DeckView.fxml" />
+         </children>
+      </HBox>
+   </children>
+</VBox>
