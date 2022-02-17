@@ -12,7 +12,7 @@ public class Deck {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "deck_id")
     private List<Card> cardList;
 

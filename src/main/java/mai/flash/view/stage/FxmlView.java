@@ -6,10 +6,6 @@ public enum FxmlView {
         public String getPath(){
             return "/FxmlFiles/MainDisplay.fxml";
         }
-    }, CARD{
-        public String getPath(){
-            return "/FxmlFiles/ChangeCard.fxml";
-        }
     };
 
     abstract String getPath();

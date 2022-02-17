@@ -25,7 +25,7 @@ public class Card {
     private Date reviewDate;
 
     //Card can be new - learning - finished
-    private String cardStatus = "new";
+    private String cardStatus;
 
     private int repetitions = 0;
 
@@ -45,10 +45,13 @@ public class Card {
         this.deck = deck;
     }
 
-    public Card(Deck deck, List<CardEntry> cardEntryList, String keyValue) {
-        this.deck = deck;
-        this.cardEntryList = cardEntryList;
+
+    //Used to update cards
+    public Card(String keyValue, List<CardEntry> cardEntryList, String cardStatus, Deck deck) {
         this.keyValue = keyValue;
+        this.cardEntryList = new ArrayList<>();
+        this.cardStatus = cardStatus;
+        this.deck = deck;
     }
 
     public void addSubValue(String value){

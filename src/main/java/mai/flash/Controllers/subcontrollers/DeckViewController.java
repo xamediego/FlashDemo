@@ -3,7 +3,9 @@ package mai.flash.Controllers.subcontrollers;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import mai.flash.Controllers.MainController;
 import mai.flash.domain.Deck;
 import mai.flash.objects.DeckLine;
 import mai.flash.repositories.DeckRepository;
@@ -32,13 +34,12 @@ public class DeckViewController implements Initializable {
 
     private final SceneSwitcher sceneSwitcher;
 
-    private String currentDeck;
-
     private Date date = Date.valueOf(LocalDate.now());
 
     @Autowired
     private DeckRepository deckRepository;
-
+    @Autowired
+    private MainController mainController;
 
     public DeckViewController(SceneSwitcher sceneSwitcher) {
         this.lineList = new ArrayList();
@@ -87,18 +88,15 @@ public class DeckViewController implements Initializable {
 
     }
 
+    //Changes menu to the flash menu of the selected deck and also passes the selected deck name to the MainController and local string, might merge these two later to centralize it at the main
     public void getFlashView(String selectedDeck) throws IOException {
-        this.currentDeck = selectedDeck;
+
+        mainController.setSelectedDeck(selectedDeck);
+
         HBox box = (HBox)this.deckBox.getParent();
+
         box.getChildren().remove(1);
         box.getChildren().add(sceneSwitcher.getNode(FxmlParts.FLASHMENU));
-    }
-
-    public String getSelectedDeck() {
-        return this.currentDeck;
-    }
-
-    public VBox getDeckList() {
-        return deckList;
+        box.setHgrow(box.getChildren().get(1), Priority.ALWAYS);
     }
 }

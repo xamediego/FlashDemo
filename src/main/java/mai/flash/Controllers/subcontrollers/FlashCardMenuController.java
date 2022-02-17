@@ -6,18 +6,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import mai.flash.Controllers.MainController;
 import mai.flash.domain.Card;
 import mai.flash.repositories.CardRepository;
 import mai.flash.view.scene.FxmlParts;
 import mai.flash.view.scene.SceneSwitcher;
-import mai.flash.view.stage.FxmlView;
-import mai.flash.view.stage.StageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +33,7 @@ public class FlashCardMenuController implements Initializable {
     @FXML
     private Label deckName;
     @FXML
-    private HBox flashBox;
+    private GridPane flashPane;
     @FXML
     private VBox mainBox;
     @FXML
@@ -49,30 +47,18 @@ public class FlashCardMenuController implements Initializable {
     @FXML
     private Button studyButton;
 
-    private SceneSwitcher sceneSwitcher;
-
     private final Date date = Date.valueOf(LocalDate.now());
 
-    private final DeckViewController deckViewController;
-
-
-
+    @Autowired
+    private MainController mainController;
+    @Autowired
+    private SceneSwitcher sceneSwitcher;
     @Autowired
     private CardRepository cardRepository;
 
-    private ApplicationContext context;
-
-    @Autowired
-    public FlashCardMenuController(SceneSwitcher sceneSwitcher, DeckViewController deckViewController, ApplicationContext context) {
-        this.sceneSwitcher = sceneSwitcher;
-        this.deckViewController = deckViewController;
-        this.context = context;
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        System.out.println("Current date: " + date);
-        deckName.setText(this.deckViewController.getSelectedDeck());
+        deckName.setText(mainController.getSelectedDeck());
         setNewCardsNumber();
         setReviewCardsNumber();
         setAmountUnfinishedNew();
@@ -108,18 +94,8 @@ public class FlashCardMenuController implements Initializable {
     }
 
     @FXML
-    private void startStudy() throws IOException {
-        HBox displayBox = (HBox)flashBox.getParent();
-
-        displayBox.getChildren().remove(1);
-        displayBox.getChildren().add(this.sceneSwitcher.getNode(FxmlParts.FLASHVIEW));
-    }
-
-    @FXML
     public void newCards(){
-        List<Card> newCards = cardRepository.getPagedCards("new",getDeckName(),PageRequest.of(0, Integer.parseInt(newAmountInput.getText())));
-        newCards.forEach(c -> c.setCardStatus("NewStudy"));
-        cardRepository.saveAll(newCards);
+        saveNewCard();
         newAmountInput.setText(null);
         setNewCardsNumber();
         setAmountUnfinishedNew();
@@ -127,18 +103,30 @@ public class FlashCardMenuController implements Initializable {
     }
 
     @FXML
-    private void addCards(){
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        context.publishEvent(new StageEvent(stage, FxmlView.CARD));
+    private void startStudy() throws IOException {
+        HBox displayBox = (HBox)flashPane.getParent();
+
+        displayBox.getChildren().remove(1);
+        displayBox.getChildren().add(sceneSwitcher.getNode(FxmlParts.FLASHVIEW));
+    }
+
+    @FXML
+    private void addCards() throws IOException {
+        HBox displayBox = (HBox)flashPane.getParent();
+
+        displayBox.getChildren().remove(1);
+        displayBox.getChildren().add(sceneSwitcher.getNode(FxmlParts.CARD));
+        displayBox.setHgrow(displayBox.getChildren().get(1), Priority.ALWAYS);
+    }
+
+    private void saveNewCard(){
+        List<Card> newCards = cardRepository.getPagedCards("new",getDeckName(),PageRequest.of(0, Integer.parseInt(newAmountInput.getText())));
+        newCards.forEach(c -> c.setCardStatus("NewStudy"));
+        cardRepository.saveAll(newCards);
     }
 
     public String getDeckName() {
         return deckName.getText();
-    }
-
-    public Date getCurrentDate() {
-        return date;
     }
 }
 

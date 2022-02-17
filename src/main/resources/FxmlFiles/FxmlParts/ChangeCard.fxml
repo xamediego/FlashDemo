@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox alignment="CENTER" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mai.flash.Controllers.subcontrollers.ChangeCardController">
+   <children>
+      <VBox fx:id="changeCardBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="575.0" spacing="5.0" HBox.hgrow="ALWAYS">
+         <children>
+            <HBox alignment="CENTER_LEFT" maxHeight="70.0" prefHeight="70.0" prefWidth="600.0" spacing="2.0" VBox.vgrow="NEVER">
+               <children>
+                  <Label text="Deck:" />
+                  <MenuButton fx:id="dropMenu" mnemonicParsing="false" />
+               </children>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </HBox>
+            <VBox alignment="CENTER" fillWidth="false" maxHeight="100.0" prefHeight="100.0" prefWidth="600.0">
+               <children>
+                  <VBox alignment="CENTER_LEFT" fillWidth="false" prefHeight="70.0" prefWidth="490.0" spacing="1.0">
+                     <children>
+                        <Label text="KeyValue" />
+                        <TextField fx:id="keyInput" prefHeight="50.0" prefWidth="480.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+            <VBox fx:id="entityBox" alignment="TOP_CENTER" fillWidth="false" prefWidth="100.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox alignment="CENTER_LEFT" fillWidth="false" prefHeight="70.0" prefWidth="490.0" spacing="1.0">
+                     <children>
+                        <Label text="Entry" />
+                        <TextField fx:id="entityInput" prefHeight="50.0" prefWidth="480.0" />
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets top="20.0" />
+               </padding>
+            </VBox>
+            <HBox alignment="CENTER_RIGHT" prefHeight="46.0" prefWidth="525.0">
+               <children>
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#addNewCard" prefHeight="25.0" prefWidth="70.0" text=" Add" HBox.hgrow="NEVER" />
+               </children>
+               <padding>
+                  <Insets right="20.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</HBox>

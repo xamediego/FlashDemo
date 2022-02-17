@@ -4,22 +4,30 @@ public enum FxmlParts {
 
     DATA{
         public String getPath(){
-            return "/FxmlFiles/DataView.fxml";
+            return "/FxmlFiles/FxmlParts/DataView.fxml";
         }
     }, DECK{
         public String getPath(){
-            return "/FxmlFiles/DeckView.fxml";
+            return "/FxmlFiles/FxmlParts/DeckView.fxml";
         }
     }, DECKTEMP{
         public String getPath(){
-            return "/FxmlFiles/DeckTemplate.fxml";
+            return "/FxmlFiles/FxmlParts/DeckTemplate.fxml";
         }
     }, FLASHMENU{
         public String getPath(){
-            return "/FxmlFiles/FlashcardMenuView.fxml";
+            return "/FxmlFiles/FxmlParts/FlashcardMenuView.fxml";
         }
     }, FLASHVIEW{
-        public String getPath(){return "/FxmlFiles/FlashcardView.fxml";}
+        public String getPath(){return "/FxmlFiles/FxmlParts/FlashcardView.fxml";}
+    }, CARD{
+        public String getPath(){
+            return "/FxmlFiles/FxmlParts/ChangeCard.fxml";
+        }
+    }, IMPORT{
+        public String getPath(){
+            return "/FxmlFiles/FxmlParts/ImportScreen.fxml";
+        }
     };
 
     abstract String getPath();

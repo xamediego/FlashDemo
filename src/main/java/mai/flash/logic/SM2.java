@@ -1,4 +1,4 @@
-package mai.flash.algorithms;
+package mai.flash.logic;
 
 import mai.flash.domain.Card;
 

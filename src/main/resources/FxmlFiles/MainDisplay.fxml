@@ -10,9 +10,9 @@
 
 <VBox fx:id="mainBox" maxHeight="500.0" maxWidth="750.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mai.flash.Controllers.MainController">
    <children>
-      <HBox fx:id="displayBox" prefHeight="500.0" prefWidth="750.0" VBox.vgrow="ALWAYS">
+      <HBox fx:id="displayBox" alignment="CENTER_LEFT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="500.0" prefWidth="750.0" VBox.vgrow="ALWAYS">
          <children>
-            <VBox prefHeight="500.0" prefWidth="175.0" HBox.hgrow="NEVER">
+            <VBox prefHeight="500.0" prefWidth="175.0">
                <children>
                   <Pane prefHeight="162.0" prefWidth="175.0" VBox.vgrow="NEVER">
                      <children>
@@ -25,7 +25,7 @@
                   </Pane>
                   <Button mnemonicParsing="false" onAction="#getDeckView" prefHeight="40.0" prefWidth="175.0" text="Decks" VBox.vgrow="NEVER" />
                   <Button mnemonicParsing="false" onAction="#getDataView" prefHeight="40.0" prefWidth="175.0" text="Statistics" VBox.vgrow="NEVER" />
-                  <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="175.0" text="Import" VBox.vgrow="NEVER" />
+                  <Button mnemonicParsing="false" onAction="#getImportView" prefHeight="40.0" prefWidth="175.0" text="Import" VBox.vgrow="NEVER" />
                   <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="175.0" text="Settings" VBox.vgrow="NEVER" />
                   <Pane prefHeight="200.0" prefWidth="175.0" VBox.vgrow="ALWAYS" />
                   <HBox prefHeight="27.0" prefWidth="175.0">
@@ -47,7 +47,7 @@
                   </HBox>
                </children>
             </VBox>
-            <fx:include source="DeckView.fxml" />
+            <fx:include source="FxmlParts/DeckView.fxml" />
          </children>
       </HBox>
    </children>

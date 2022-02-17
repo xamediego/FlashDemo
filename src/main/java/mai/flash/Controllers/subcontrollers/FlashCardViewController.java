@@ -6,11 +6,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import mai.flash.algorithms.SM2;
+import mai.flash.logic.SM2;
 import mai.flash.domain.Card;
 import mai.flash.repositories.CardEntryRepository;
 import mai.flash.repositories.CardRepository;
-import mai.flash.repositories.DeckRepository;
 import mai.flash.view.scene.FxmlParts;
 import mai.flash.view.scene.SceneSwitcher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +26,6 @@ import java.util.ResourceBundle;
 @Component
 public class FlashCardViewController implements Initializable {
 
-    @FXML
-    private VBox mondaiBox;
     @FXML
     private VBox answerBox;
     @FXML
@@ -53,15 +50,11 @@ public class FlashCardViewController implements Initializable {
     private Label goodTime;
 
     @Autowired
-    private DeckRepository deckRepository;
-    @Autowired
     private CardRepository cardRepository;
     @Autowired
     private CardEntryRepository cardEntryRepository;
 
     private final Date date = Date.valueOf(LocalDate.now());
-
-    private final FlashCardMenuController flashCardMenuController;
 
     private final List<Card> currentList;
 
@@ -69,10 +62,10 @@ public class FlashCardViewController implements Initializable {
 
     @Autowired
     private SceneSwitcher sceneSwitcher;
-
     @Autowired
-    public FlashCardViewController(FlashCardMenuController flashCardMenuController) {
-        this.flashCardMenuController = flashCardMenuController;
+    private FlashCardMenuController flashCardMenuController;
+
+    public FlashCardViewController() {
         this.currentList = new ArrayList<>();
         this.finishedList = new ArrayList<>();
     }
@@ -108,7 +101,6 @@ public class FlashCardViewController implements Initializable {
 
     @FXML
     private void goodAnswer(){
-
         checkIfNew();
 
         SM2.setDateValue(this.currentList.get(0), this.currentList.get(0).getQuality());
@@ -121,7 +113,6 @@ public class FlashCardViewController implements Initializable {
 
     @FXML
     private void hard(){
-
         checkIfNew();
 
         this.currentList.get(0).decreaseQuality();
