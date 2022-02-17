@@ -20,6 +20,7 @@ public class Card {
     @JoinColumn(name = "deck_id")
     private List<CardEntry> cardEntryList;
 
+    @Column(length=1000)
     private String keyValue;
 
     private Date reviewDate;

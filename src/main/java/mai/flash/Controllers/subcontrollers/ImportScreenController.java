@@ -63,6 +63,10 @@ public class ImportScreenController {
         deckRepository.save(importer.getNewDeck());
         cardRepository.saveAll(importer.getSaveAbleCardList());
         cardEntryRepository.saveAll(importer.getSaveAbleCardEntryList());
+
+        //System.out.println("New Deck Size" + deckRepository.count());
+        //System.out.println("New Card a Size" + cardRepository.count());
+        //System.out.println("New Entry a Size" + cardEntryRepository.count());
     }
 
 

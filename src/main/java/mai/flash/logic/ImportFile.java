@@ -20,6 +20,10 @@ public class ImportFile {
     public void startImport(String filePath, String deckName){
         createDeck(deckName);
         parseRows(filePath);
+
+
+        //System.out.println("List Card a Size" + saveAbleCardList.size());
+        //System.out.println("List Entry a Size" + saveAbleCardEntryList.size());
     }
 
     private void createDeck(String deckName){
