@@ -83,7 +83,7 @@ public class DeckViewController implements Initializable {
 
         HBox box = (HBox)this.deckBox.getParent();
 
-        box.getChildren().remove(1);
+        box.getChildren().remove(this.deckBox);
         box.getChildren().add(sceneSwitcher.getNode(FxmlParts.FLASHMENU));
         box.setHgrow(box.getChildren().get(1), Priority.ALWAYS);
     }

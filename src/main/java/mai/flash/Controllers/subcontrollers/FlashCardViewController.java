@@ -151,7 +151,7 @@ public class FlashCardViewController implements Initializable {
 
                 this.cardRepository.saveAll(finishedList);
                 HBox displayBox = (HBox)flashViewBox.getParent();
-                displayBox.getChildren().remove(1);
+                displayBox.getChildren().remove(flashViewBox);
                 displayBox.getChildren().add(this.sceneSwitcher.getNode(FxmlParts.FLASHMENU));
 
             } catch (IOException e) {

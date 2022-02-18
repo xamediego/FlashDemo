@@ -106,7 +106,7 @@ public class FlashCardMenuController implements Initializable {
     private void startStudy() throws IOException {
         HBox displayBox = (HBox)flashPane.getParent();
 
-        displayBox.getChildren().remove(1);
+        displayBox.getChildren().remove(flashPane);
         displayBox.getChildren().add(sceneSwitcher.getNode(FxmlParts.FLASHVIEW));
     }
 
@@ -114,7 +114,7 @@ public class FlashCardMenuController implements Initializable {
     private void addCards() throws IOException {
         HBox displayBox = (HBox)flashPane.getParent();
 
-        displayBox.getChildren().remove(1);
+        displayBox.getChildren().remove(flashPane);
         displayBox.getChildren().add(sceneSwitcher.getNode(FxmlParts.CARD));
         displayBox.setHgrow(displayBox.getChildren().get(1), Priority.ALWAYS);
     }

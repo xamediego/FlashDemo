@@ -1,8 +1,13 @@
-package mai.flash.logic;
+package mai.flash.importer;
 
 import mai.flash.domain.Card;
 import mai.flash.domain.CardEntry;
 import mai.flash.domain.Deck;
+import mai.flash.repositories.CardEntryRepository;
+import mai.flash.repositories.CardRepository;
+import mai.flash.repositories.DeckRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Files;
@@ -11,19 +16,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class ImportFile {
+public class importListener implements ApplicationListener<importEvent> {
 
-    public List<Card> saveAbleCardList = new ArrayList<>();
-    public List<CardEntry> saveAbleCardEntryList = new ArrayList<>();
-    public Deck deck;
+    private List<Card> saveAbleCardList = new ArrayList<>();
+    private List<CardEntry> saveAbleCardEntryList = new ArrayList<>();
+    private Deck deck;
 
-    public void startImport(String filePath, String deckName){
-        createDeck(deckName);
-        parseRows(filePath);
+    @Autowired
+    private final DeckRepository deckRepository;
+    @Autowired
+    private final CardRepository cardRepository;
+    @Autowired
+    private final CardEntryRepository cardEntryRepository;
 
+    public importListener(DeckRepository deckRepository, CardRepository cardRepository, CardEntryRepository cardEntryRepository) {
+        this.deckRepository = deckRepository;
+        this.cardRepository = cardRepository;
+        this.cardEntryRepository = cardEntryRepository;
+    }
 
-        //System.out.println("List Card a Size" + saveAbleCardList.size());
-        //System.out.println("List Entry a Size" + saveAbleCardEntryList.size());
+    @Override
+    public void onApplicationEvent(importEvent importEvent) {
+        createDeck(importEvent.getDeckName());
+        parseRows(importEvent.getFilePath());
     }
 
     private void createDeck(String deckName){
@@ -33,6 +48,7 @@ public class ImportFile {
     private void parseRows(String filePath){
         try{
             Files.lines(Paths.get(filePath)).map((row -> row.split("\\t"))).forEach(line -> prepareInput(line));
+            saveNewDeck();
         }catch (Exception e){
             System.out.println(e);
         }
@@ -68,15 +84,14 @@ public class ImportFile {
         return cardEntryList;
     }
 
-    public List<Card> getSaveAbleCardList() {
-        return saveAbleCardList;
-    }
+    private void saveNewDeck(){
+        System.out.println("Starting save");
+        deckRepository.save(deck);
+        cardRepository.saveAll(saveAbleCardList);
+        cardEntryRepository.saveAll(saveAbleCardEntryList);
 
-    public List<CardEntry> getSaveAbleCardEntryList() {
-        return saveAbleCardEntryList;
-    }
-
-    public Deck getNewDeck() {
-        return deck;
+        System.out.println("New Deck Size" + deckRepository.count() +
+                "\nNew Card a Size" + cardRepository.count() +
+                "\nNew Entry a Size" + cardEntryRepository.count());
     }
 }

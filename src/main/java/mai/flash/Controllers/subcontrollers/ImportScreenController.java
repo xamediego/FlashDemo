@@ -4,11 +4,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
-import mai.flash.logic.ImportFile;
+import mai.flash.importer.importEvent;
 import mai.flash.repositories.CardEntryRepository;
 import mai.flash.repositories.CardRepository;
 import mai.flash.repositories.DeckRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -22,20 +23,18 @@ public class ImportScreenController {
 
     @FXML
     private Label filePath;
-
+    @FXML
+    private Label nameErrorLabel;
     @FXML
     private TextField newDeckName;
 
     private FileChooser fileChooser = new FileChooser();
 
-    @Autowired
-    private DeckRepository deckRepository;
-    @Autowired
-    private CardRepository cardRepository;
-    @Autowired
-    private CardEntryRepository cardEntryRepository;
+    private final ApplicationContext applicationContext;
 
-    private ImportFile importer;
+    public ImportScreenController(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
 
     public void selectFilePath(){
         File selectedFile = fileChooser.showOpenDialog(null);
@@ -48,26 +47,16 @@ public class ImportScreenController {
         filePath.setText(null);
     }
 
-
-
     /*
     want to move the save to the ImportFile class but autowiring the repos doesnt seem to work there
      */
     public void importFile(){
-        importer = new ImportFile();
-        importer.startImport(filePath.getText(), newDeckName.getText());
-        saveNewDeck();
+        if(!newDeckName.getText().isEmpty()) {
+            nameErrorLabel.setText(null);
+            applicationContext.publishEvent(new importEvent(filePath.getText(), newDeckName.getText()));
+        }else{
+            nameErrorLabel.setText("Please enter a valid Deck Name");
+        }
     }
-
-    private void saveNewDeck(){
-        deckRepository.save(importer.getNewDeck());
-        cardRepository.saveAll(importer.getSaveAbleCardList());
-        cardEntryRepository.saveAll(importer.getSaveAbleCardEntryList());
-
-        //System.out.println("New Deck Size" + deckRepository.count());
-        //System.out.println("New Card a Size" + cardRepository.count());
-        //System.out.println("New Entry a Size" + cardEntryRepository.count());
-    }
-
 
 }
