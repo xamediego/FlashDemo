@@ -6,7 +6,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import mai.flash.Controllers.MainController;
-import mai.flash.domain.Deck;
 import mai.flash.objects.DeckLine;
 import mai.flash.repositories.DeckRepository;
 import mai.flash.view.scene.FxmlParts;
@@ -48,9 +47,6 @@ public class DeckViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        /*want to find way to not have to use these and not have to use something weird for creating the decklines
-            maybe initialize the decklines when the maincontroller initializes
-         */
         lineList.clear();
         deckList.getChildren().clear();
 
@@ -58,7 +54,6 @@ public class DeckViewController implements Initializable {
     }
 
     public void createDeckLines(){
-
         deckRepository.findAll().forEach(deck -> lineList.add(new DeckLine(deck.getName()
                 , deckRepository.getCardStatusSize(deck.getName(), "NewStudy")
                 , deckRepository.getCardStatusDateLessSize(deck.getName(), "review", date),
@@ -68,23 +63,26 @@ public class DeckViewController implements Initializable {
 
         lineList.forEach(l -> l.getDeckName().setOnMouseClicked(mouseEvent -> {
             try {
-                getFlashView(l.getDeckName().getText());
+                setSelectedStatus(l.getDeckName().getText(), l.getId());
+                getFlashView();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }));
-
     }
 
-    //Changes menu to the flash menu of the selected deck and also passes the selected deck name to the MainController and local string, might merge these two later to centralize it at the main
-    public void getFlashView(String selectedDeck) throws IOException {
-
-        mainController.setSelectedDeck(selectedDeck);
-
+    //find other way instead of useing the getChildren().get(1) to set the Hgrow
+    public void getFlashView() throws IOException {
         HBox box = (HBox)this.deckBox.getParent();
 
         box.getChildren().remove(this.deckBox);
         box.getChildren().add(sceneSwitcher.getNode(FxmlParts.FLASHMENU));
         box.setHgrow(box.getChildren().get(1), Priority.ALWAYS);
+    }
+
+    //Store these temps somewhere else?
+    public void setSelectedStatus(String selectedDeck, Long deckId){
+        mainController.setSelectedDeckName(selectedDeck);
+        mainController.setSelectedDeckId(deckId);
     }
 }

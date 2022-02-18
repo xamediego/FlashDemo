@@ -1,4 +1,4 @@
-package mai.flash.importer;
+package mai.flash.events.importevent;
 
 import mai.flash.domain.Card;
 import mai.flash.domain.CardEntry;
@@ -50,7 +50,7 @@ public class importListener implements ApplicationListener<importEvent> {
             Files.lines(Paths.get(filePath)).map((row -> row.split("\\t"))).forEach(line -> prepareInput(line));
             saveNewDeck();
         }catch (Exception e){
-            System.out.println(e);
+            System.out.println("Something went wrong while reading the file");
         }
     }
 
@@ -85,13 +85,14 @@ public class importListener implements ApplicationListener<importEvent> {
     }
 
     private void saveNewDeck(){
+
         System.out.println("Starting save");
         deckRepository.save(deck);
         cardRepository.saveAll(saveAbleCardList);
         cardEntryRepository.saveAll(saveAbleCardEntryList);
 
-        System.out.println("New Deck Size" + deckRepository.count() +
-                "\nNew Card a Size" + cardRepository.count() +
-                "\nNew Entry a Size" + cardEntryRepository.count());
+        System.out.println("New Deck Size: " + deckRepository.count() +
+                "\nNew Card a Size: " + cardRepository.count() +
+                "\nNew Entry a Size: " + cardEntryRepository.count());
     }
 }

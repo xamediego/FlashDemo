@@ -12,10 +12,12 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import mai.flash.Controllers.MainController;
 import mai.flash.domain.Card;
+import mai.flash.events.deldeckevent.DeleteDeckEvent;
 import mai.flash.repositories.CardRepository;
 import mai.flash.view.scene.FxmlParts;
 import mai.flash.view.scene.SceneSwitcher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
@@ -56,9 +58,15 @@ public class FlashCardMenuController implements Initializable {
     @Autowired
     private CardRepository cardRepository;
 
+    private final ApplicationContext applicationContext;
+
+    public FlashCardMenuController(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        deckName.setText(mainController.getSelectedDeck());
+        deckName.setText(mainController.getSelectedDeckName());
         setNewCardsNumber();
         setReviewCardsNumber();
         setAmountUnfinishedNew();
@@ -123,6 +131,11 @@ public class FlashCardMenuController implements Initializable {
         List<Card> newCards = cardRepository.getPagedCards("new",getDeckName(),PageRequest.of(0, Integer.parseInt(newAmountInput.getText())));
         newCards.forEach(c -> c.setCardStatus("NewStudy"));
         cardRepository.saveAll(newCards);
+    }
+
+    @FXML
+    private void deleteDeck(){
+        applicationContext.publishEvent(new DeleteDeckEvent(mainController.getSelectedDeckId()));
     }
 
     public String getDeckName() {

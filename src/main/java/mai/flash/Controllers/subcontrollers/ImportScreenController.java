@@ -4,11 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
-import mai.flash.importer.importEvent;
-import mai.flash.repositories.CardEntryRepository;
-import mai.flash.repositories.CardRepository;
-import mai.flash.repositories.DeckRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import mai.flash.events.importevent.importEvent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 

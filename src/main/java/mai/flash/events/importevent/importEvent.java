@@ -1,4 +1,4 @@
-package mai.flash.importer;
+package mai.flash.events.importevent;
 
 import org.springframework.context.ApplicationEvent;
 
