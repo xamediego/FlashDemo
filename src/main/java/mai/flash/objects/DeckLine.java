@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 import java.util.Objects;
 
@@ -21,39 +22,41 @@ public class DeckLine {
 
     private HBox deckBox;
 
-    public DeckLine(String deckName, Long id) {
-        this.deckName = new Label(deckName);
-        this.deckBox = new HBox();
-        this.unfinishedNew = "0";
-        this.reviews = "0";
-        this.settingsButton = new Button();
-        this.id = id;
-        getDeckLine();
-    }
+    private boolean isGrouped;
 
-    public DeckLine(String deckName, long unfinishedNew, long reviews , Long id) {
+    public DeckLine(String deckName, long unfinishedNew, long reviews , Long id, boolean isGrouped) {
         this.deckName = new Label(deckName);
         this.unfinishedNew = String.valueOf(unfinishedNew);
         this.reviews = String.valueOf(reviews);
         this.deckBox = new HBox();
         this.settingsButton = new Button();
         this.id = id;
-        getDeckLine();
+        this.isGrouped = isGrouped;
+        constructDeckLine();
     }
 
-    public HBox getDeckLine(){
+    public HBox constructDeckLine(){
 
         this.deckName.setPadding(new Insets(0,0,0,10));
+
+        Label isGroupedLabel = new Label();
+        isGroupedLabel.setPadding(new Insets(0,0,0,10));
+
         Pane buffPane = new Pane();
         buffPane.setPrefSize(0,45);
 
-        HBox nameBox = new HBox(this.deckName,buffPane);
+        HBox nameBox = new HBox(this.deckName,buffPane, isGroupedLabel);
         nameBox.setAlignment(Pos.CENTER_LEFT);
         nameBox.setPrefSize(390,25);
 
         Label unfinishedNew = new Label(this.unfinishedNew);
+        unfinishedNew.setTextFill(Color.rgb(58,171,48));
+
         Label separator = new Label("|");
+
         Label reviews = new Label(this.reviews);
+        reviews.setTextFill(Color.rgb(218,47,47));
+
         HBox counterBox = new HBox(unfinishedNew,separator,reviews);
         counterBox.setSpacing(2);
         counterBox.setPrefSize(100,25);
@@ -119,6 +122,23 @@ public class DeckLine {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public boolean isGrouped() {
+        return isGrouped;
+    }
+
+    public void setGrouped(boolean grouped) {
+        isGrouped = grouped;
+    }
+
+    @Override
+    public String toString(){
+        return "Deck Name: " + this.deckName.getText() +
+                "\nId : " + this.id +
+                "\nIs Grouped: " + this.isGrouped +
+                "\nUnfinished New " + unfinishedNew +
+                "\nReviews: " + this.reviews;
     }
 
     @Override

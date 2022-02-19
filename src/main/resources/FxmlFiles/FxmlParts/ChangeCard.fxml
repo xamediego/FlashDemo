@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox alignment="CENTER" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mai.flash.Controllers.subcontrollers.ChangeCardController">
+<HBox fx:id="changeCardBox" alignment="CENTER" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mai.flash.Controllers.subcontrollers.ChangeCardController">
    <children>
-      <VBox fx:id="changeCardBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="575.0" spacing="5.0" HBox.hgrow="ALWAYS">
+      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="575.0" spacing="5.0" HBox.hgrow="ALWAYS">
          <children>
             <HBox alignment="CENTER_LEFT" maxHeight="70.0" prefHeight="70.0" prefWidth="600.0" spacing="2.0" VBox.vgrow="NEVER">
                <children>

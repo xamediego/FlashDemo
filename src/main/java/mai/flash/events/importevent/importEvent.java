@@ -6,9 +6,11 @@ public class importEvent extends ApplicationEvent {
 
     private final String deckName;
 
+
     public importEvent(String source, String deckName){
         super(source);
         this.deckName = deckName;
+
     }
 
     public String getFilePath(){
@@ -18,5 +20,6 @@ public class importEvent extends ApplicationEvent {
     public String getDeckName() {
         return deckName;
     }
+
 
 }

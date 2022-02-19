@@ -9,13 +9,15 @@ import java.util.List;
 
 public interface CardRepository extends CrudRepository<Card,Long> {
 
-    List<Card> findByCardStatusAndDeck_Name(String cardStatus, String name);
 
-    @Query("select c from Card c where c.cardStatus = ?1 and c.deck.name = ?2")
-    List<Card> getPagedCards(String cardStatus, String name, Pageable pageable);
 
-    List<Card> findByDeck_NameAndReviewDateIsLessThanEqual(String name, Date reviewDate);
+    List<Card> findByDeck_IdAndCardStatus(Long id, String cardStatus);
 
-    List<Card> findByDeck_NameAndReviewDateIsLessThanEqualAndCardStatus(String name, java.sql.Date reviewDate, String cardStatus);
+    @Query("select c from Card c where c.deck.id = ?1 and c.cardStatus = ?2")
+    List<Card> FindPageable_IdAndCardStatus(Long id, String cardStatus, Pageable pageable);
+
+    List<Card> findByDeck_IdAndCardStatusAndReviewDateIsLessThanEqual(Long id, String cardStatus, java.sql.Date reviewDate);
+
+    List<Card> findByDeck_IdAndReviewDateIsLessThanEqual(Long id, java.sql.Date reviewDate);
 
 }

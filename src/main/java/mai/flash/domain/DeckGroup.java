@@ -1,61 +1,71 @@
 package mai.flash.domain;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class Deck {
+public class DeckGroup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "deck_id")
+    //vals for smaller sub tests, for normal study the values in the parent deck are used
+    private double punishmentFactor;
+    private double easyMultiplier;
+    private double goodMultiplier;
+
+    private Date reviewDate;
+
+    @OneToMany
+    @JoinColumn(name = "deckgroup_id")
     private List<Card> cardList;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "deck_id")
-    private List<DeckGroup> groupList;
+    @ManyToOne
+    private Deck deck;
 
-    private boolean grouped = false;
-
-    private String name;
-
-    private double punishmentFactor = 0.90;
-    private double easyMultiplier = 1.3;
-    private double goodMultiplier = 1;
-
-    public Deck() {
+    public DeckGroup() {
         this.cardList = new ArrayList<>();
     }
 
-    public Deck(String name) {
-        this.name = name;
-        this.cardList = new ArrayList<>();
-    }
-
-    public Deck(List<Card> cardList, String name) {
-        this.cardList = cardList;
-        this.name = name;
+    public DeckGroup(Deck deck) {
+        this();
+        this.deck = deck;
     }
 
     public Long getId() {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public List<Card> getCardList() {
         return cardList;
     }
 
-    public String getName() {
-        return name;
+    public void setCardList(List<Card> cardList) {
+        this.cardList = cardList;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Date getReviewDate() {
+        return reviewDate;
+    }
+
+    public void setReviewDate(Date reviewDate) {
+        this.reviewDate = reviewDate;
+    }
+
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public void setDeck(Deck deck) {
+        this.deck = deck;
     }
 
     public double getPunishmentFactor() {
@@ -82,19 +92,15 @@ public class Deck {
         this.goodMultiplier = goodMultiplier;
     }
 
-    public boolean isGrouped() {
-        return grouped;
-    }
-
-    public void setGrouped(boolean grouped) {
-        this.grouped = grouped;
-    }
-
     @Override
     public String toString() {
-        return "Deck{" +
+        return "Group{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", punishmentFactor=" + punishmentFactor +
+                ", easyMultiplier=" + easyMultiplier +
+                ", goodMultiplier=" + goodMultiplier +
+                ", reviewDate=" + reviewDate +
+                ", deck=" + deck +
                 '}';
     }
 
@@ -102,8 +108,8 @@ public class Deck {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Deck publisher = (Deck) o;
-        return Objects.equals(id, publisher.id);
+        DeckGroup group = (DeckGroup) o;
+        return Objects.equals(id, group.id);
     }
 
     @Override

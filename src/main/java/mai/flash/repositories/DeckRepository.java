@@ -17,6 +17,10 @@ public interface DeckRepository extends CrudRepository<Deck, Long> {
 
     Deck findByName(String name);
 
+    boolean existsByName(String name);
+
+
+
 
 
 

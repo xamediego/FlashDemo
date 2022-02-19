@@ -6,8 +6,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import mai.flash.logic.SM2;
+import mai.flash.Controllers.BadValueStorageClass;
 import mai.flash.domain.Card;
+import mai.flash.logic.Scheduler;
 import mai.flash.repositories.CardEntryRepository;
 import mai.flash.repositories.CardRepository;
 import mai.flash.view.scene.FxmlParts;
@@ -56,32 +57,31 @@ public class FlashCardViewController implements Initializable {
 
     private final Date date = Date.valueOf(LocalDate.now());
 
-    private final List<Card> currentList;
+    private List<Card> currentList;
 
-    private final List<Card> finishedList;
+    private List<Card> finishedList;
 
     @Autowired
     private SceneSwitcher sceneSwitcher;
     @Autowired
     private FlashCardMenuController flashCardMenuController;
 
-    public FlashCardViewController() {
-        this.currentList = new ArrayList<>();
-        this.finishedList = new ArrayList<>();
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.currentList.addAll(cardRepository.findByDeck_NameAndReviewDateIsLessThanEqual(flashCardMenuController.getDeckName(),date));
-        this.currentList.addAll(cardRepository.findByCardStatusAndDeck_Name("NewStudy", flashCardMenuController.getDeckName()));
+        this.currentList = new ArrayList<>();
+        this.finishedList = new ArrayList<>();
+
+        this.currentList.addAll(cardRepository.findByDeck_IdAndReviewDateIsLessThanEqual(BadValueStorageClass.getSelectedDeckId(),date));
+        this.currentList.addAll(cardRepository.findByDeck_IdAndCardStatus(BadValueStorageClass.getSelectedDeckId(),"NewLearn"));
+
         keyword.setText(this.currentList.get(0).getKeyValue());
         buttonBox.setVisible(false);
         setCounters();
     }
 
     private void setCounters(){
-        unfinishedNewLabel.setText(String.valueOf(this.currentList.stream().filter(s -> s.getCardStatus().equals("NewStudy")).count()));
-        unfinishedReviewLabel.setText(String.valueOf(this.currentList.stream().filter(s -> s.getCardStatus().equals("review")).count()));
+        unfinishedNewLabel.setText(String.valueOf(this.currentList.stream().filter(s -> s.getCardStatus().equals("NewLearn")).count()));
+        unfinishedReviewLabel.setText(String.valueOf(this.currentList.stream().filter(s -> s.getCardStatus().equals("Learning")).count()));
     }
 
     @FXML
@@ -96,18 +96,17 @@ public class FlashCardViewController implements Initializable {
     }
 
     private void setButtonTime(){
-        this.goodTime.setText(String.valueOf(SM2.calculateSM2Time(this.currentList.get(0), (this.currentList.get(0).getQuality() + 1))));
+        this.goodTime.setText(String.valueOf(Scheduler.getAmountOfDaysPlus(this.currentList.get(0), "Good")));
+        this.hardTime.setText(String.valueOf(Scheduler.getAmountOfDaysPlus(this.currentList.get(0), "Hard")));
     }
 
     @FXML
     private void goodAnswer(){
         checkIfNew();
 
-        SM2.setDateValue(this.currentList.get(0), this.currentList.get(0).getQuality());
+        this.currentList.get(0).setReviewDate(Scheduler.getNewSchedule(this.currentList.get(0), "Good"));
 
-        this.currentList.get(0).increaseQuality();
-
-        this.finishedList.add(this.currentList.remove(0));
+        cardRepository.save(this.currentList.remove(0));
         resetScreen();
     }
 
@@ -115,11 +114,9 @@ public class FlashCardViewController implements Initializable {
     private void hard(){
         checkIfNew();
 
-        this.currentList.get(0).decreaseQuality();
+        this.currentList.get(0).setReviewDate(Scheduler.getNewSchedule(this.currentList.get(0), "Hard"));
 
-        SM2.setDateValue(this.currentList.get(0), this.currentList.get(0).getQuality());
-
-        this.currentList.add(this.currentList.remove(0));
+        cardRepository.save(this.currentList.remove(0));
         resetScreen();
     }
 
@@ -133,7 +130,7 @@ public class FlashCardViewController implements Initializable {
     private void checkIfNew(){
         if(this.currentList.get(0).getReviewDate() == null){
             this.currentList.get(0).setReviewDate(date);
-            this.currentList.get(0).setCardStatus("review");
+            this.currentList.get(0).setCardStatus("Learning");
         }
     }
 
@@ -148,8 +145,6 @@ public class FlashCardViewController implements Initializable {
 
         }else{
             try {
-
-                this.cardRepository.saveAll(finishedList);
                 HBox displayBox = (HBox)flashViewBox.getParent();
                 displayBox.getChildren().remove(flashViewBox);
                 displayBox.getChildren().add(this.sceneSwitcher.getNode(FxmlParts.FLASHMENU));

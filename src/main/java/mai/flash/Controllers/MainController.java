@@ -3,8 +3,11 @@ package mai.flash.Controllers;
 import javafx.fxml.FXML;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import mai.flash.Controllers.subcontrollers.FlashCardViewController;
 import mai.flash.view.scene.FxmlParts;
 import mai.flash.view.scene.SceneSwitcher;
+import org.checkerframework.checker.units.qual.A;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -21,9 +24,8 @@ public class MainController{
         this.sceneSwitcher = sceneSwitcher;
     }
 
-    //value used to remember the deck selected in case other windows use this as a starting value
-    private String selectedDeckName;
-    private Long selectedDeckId;
+    @Autowired
+    private FlashCardViewController flashCardViewController;
 
     @FXML
     private void getDeckView() throws IOException {
@@ -41,23 +43,7 @@ public class MainController{
     private void getImportView() throws IOException {
         displayBox.getChildren().remove(1);
         displayBox.getChildren().add(sceneSwitcher.getNode(FxmlParts.IMPORT));
-        displayBox.setHgrow(displayBox.getChildren().get(0), Priority.ALWAYS);
-    }
-
-    public String getSelectedDeckName() {
-        return selectedDeckName;
-    }
-
-    public void setSelectedDeckName(String selectedDeck) {
-        this.selectedDeckName = selectedDeck;
-    }
-
-    public Long getSelectedDeckId() {
-        return selectedDeckId;
-    }
-
-    public void setSelectedDeckId(Long selectedDeckId) {
-        this.selectedDeckId = selectedDeckId;
+        displayBox.setHgrow(displayBox.getChildren().get(1), Priority.ALWAYS);
     }
 
 }

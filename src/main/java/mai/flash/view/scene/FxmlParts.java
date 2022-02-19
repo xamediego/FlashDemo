@@ -28,6 +28,18 @@ public enum FxmlParts {
         public String getPath(){
             return "/FxmlFiles/FxmlParts/ImportScreen.fxml";
         }
+    }, GROUPDECK{
+        public String getPath(){
+            return "/FxmlFiles/FxmlParts/GroupDeckMenu.fxml";
+        }
+    }, GROUPMENU{
+        public String getPath(){
+            return "/FxmlFiles/FxmlParts/GroupMenu.fxml";
+        }
+    }, GRFLASHVIEW{
+        public String getPath(){
+            return "/FxmlFiles/FxmlParts/GroupFlashView.fxml";
+        }
     };
 
     abstract String getPath();

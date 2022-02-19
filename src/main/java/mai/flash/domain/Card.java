@@ -16,43 +16,48 @@ public class Card {
     @ManyToOne
     private Deck deck;
 
-    @OneToMany
-    @JoinColumn(name = "deck_id")
-    private List<CardEntry> cardEntryList;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "card_id")
+    private List<CardEntry> cardEntryList = new ArrayList<>();
+
+    @ManyToOne
+    private DeckGroup group;
 
     @Column(length=1000)
     private String keyValue;
 
     private Date reviewDate;
 
-    //Card can be new - learning - finished
+    //Card can be new - NewLearn - Learning - Graduated
     private String cardStatus;
 
-    private int repetitions = 0;
+    private double easinessFactor = (float)2.4;
 
-    private float easinessFactor = 0;
+    private int cardInterval = 1;
 
-    private int cardInterval = 0;
+    //Used in group review
+    private boolean hardLabel;
 
-    private int quality = 0;
+    private boolean goodLabel;
+
+    private boolean finishedLabel;
 
     public Card() {
-        this.cardEntryList = new ArrayList<>();
+    }
+
+    public Card(String keyValue) {
+        this.keyValue = keyValue;
     }
 
     public Card(String keyValue, Deck deck) {
-        this.keyValue = keyValue;
-        this.cardEntryList = new ArrayList<>();
+        this(keyValue);
         this.deck = deck;
     }
 
-
     //Used to update cards
     public Card(String keyValue, List<CardEntry> cardEntryList, String cardStatus, Deck deck) {
-        this.keyValue = keyValue;
-        this.cardEntryList = new ArrayList<>();
+        this(keyValue,deck);
         this.cardStatus = cardStatus;
-        this.deck = deck;
     }
 
     public void addSubValue(String value){
@@ -107,19 +112,11 @@ public class Card {
         this.cardStatus = cardStatus;
     }
 
-    public int getRepetitions() {
-        return repetitions;
-    }
-
-    public void setRepetitions(int repetitions) {
-        this.repetitions = repetitions;
-    }
-
-    public float getEasinessFactor() {
+    public double getEasinessFactor() {
         return easinessFactor;
     }
 
-    public void setEasinessFactor(float easinessFactor) {
+    public void setEasinessFactor(double easinessFactor) {
         this.easinessFactor = easinessFactor;
     }
 
@@ -131,46 +128,45 @@ public class Card {
         this.cardInterval = cardInterval;
     }
 
-    public int getQuality() {
-        return quality;
-    }
-
-    public void setQuality(int quality) {
-        this.quality = quality;
-    }
-
-    public void increaseQuality(){
-        if(this.quality < 5){
-            this.quality++;
-        }
-    }
-
-    public void decreaseQuality(){
-        if(this.quality > 5){
-            this.quality--;
-        }
-    }
-
     public void resetValues(){
-        this.quality = 0;
-        this.cardInterval = 0;
-        this.easinessFactor = 0;
-        this.repetitions = 0;
+        this.easinessFactor = (float)2.40;
+        this.cardInterval = 1;
     }
 
-    @Override
-    public String toString() {
-        return "Card{" +
-                "id=" + id +
-                ", deck=" + deck +
-                ", keyValue='" + keyValue + '\'' +
-                ", reviewDate=" + reviewDate +
-                ", cardStatus='" + cardStatus + '\'' +
-                ", repetitions=" + repetitions +
-                ", easinessFactor=" + easinessFactor +
-                ", cardInterval=" + cardInterval +
-                ", quality=" + quality +
-                '}';
+
+
+    public boolean isHardLabel() {
+        return hardLabel;
+    }
+
+    public void setHardLabel(boolean hardLabel) {
+        this.hardLabel = hardLabel;
+    }
+
+    public boolean isGoodLabel() {
+        return goodLabel;
+    }
+
+    public void setGoodLabel(boolean goodLabel) {
+        this.goodLabel = goodLabel;
+    }
+
+    public boolean isFinishedLabel() {
+        return finishedLabel;
+    }
+
+    public void setFinishedLabel(boolean finishedLabel) {
+        this.finishedLabel = finishedLabel;
+    }
+
+    public Card(Long id, Deck deck, String keyValue, Date reviewDate, String cardStatus, float easinessFactor, int cardInterval) {
+        this.id = id;
+        this.deck = deck;
+        this.keyValue = keyValue;
+        this.reviewDate = reviewDate;
+        this.cardStatus = cardStatus;
+        this.easinessFactor = easinessFactor;
+        this.cardInterval = cardInterval;
     }
 
     @Override
