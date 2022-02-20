@@ -1,5 +1,7 @@
 package mai.flash.domain;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -16,6 +18,9 @@ public class CardEntry {
     @ManyToOne
     private Card card;
 
+    @ManyToOne
+    private DeckGroup deckGroup;
+
 
     public CardEntry() {
     }
@@ -25,7 +30,7 @@ public class CardEntry {
     }
 
     public CardEntry(String entryValue, Card card) {
-        this.entryValue = entryValue;
+        this(entryValue);
         this.card = card;
     }
 
@@ -51,6 +56,14 @@ public class CardEntry {
 
     public void setCard(Card card) {
         this.card = card;
+    }
+
+    public DeckGroup getDeckGroup() {
+        return deckGroup;
+    }
+
+    public void setDeckGroup(DeckGroup deckGroup) {
+        this.deckGroup = deckGroup;
     }
 
     @Override

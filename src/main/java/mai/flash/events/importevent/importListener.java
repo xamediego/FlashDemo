@@ -60,7 +60,6 @@ public class importListener implements ApplicationListener<importEvent> {
     }
 
     private void prepareInput(String[] line) {
-        System.out.println("Amount of parts " + line.length);
 
         List<CardEntry> tempEntryList = prepareEntryList(line);
         Card newCard = prepareCard(line[0], tempEntryList);
@@ -76,7 +75,6 @@ public class importListener implements ApplicationListener<importEvent> {
     }
 
     private Card prepareCard(String keyword, List<CardEntry> entryList) {
-        System.out.println("new Card " + keyword);
         return new Card(keyword, entryList, "new", deck);
     }
 
@@ -85,14 +83,12 @@ public class importListener implements ApplicationListener<importEvent> {
         List<CardEntry> cardEntryList = new ArrayList<>();
 
         for (int i = 1; i < line.length; i++) {
-            System.out.println("new entry " + line[i]);
             cardEntryList.add(new CardEntry(line[i]));
         }
         return cardEntryList;
     }
 
     private void groupCards() {
-
         groupList = new ArrayList<>();
 
         DeckGroup newGroup = new DeckGroup(deck);
@@ -100,36 +96,36 @@ public class importListener implements ApplicationListener<importEvent> {
         for (int i = 1; i <= saveAbleCardList.size(); i++) {
 
             newGroup.getCardList().add(saveAbleCardList.get(i - 1));
+
             if (i % 20 == 0) {
+                newGroup.setGroupNumber(groupList.size() + 1);
                 groupList.add(newGroup);
-                newGroup.getCardList().clear();
+                newGroup = new DeckGroup(deck);
             }
 
         }
 
-        System.out.println(groupList.size() + " amount of groups created" +
-                "\n amount of groups should match: " + saveAbleCardList.size() / 20);
+        groupList.forEach(g -> deck.getGroupList().add(g));
+        groupList.forEach(g -> g.getCardList().forEach(c -> c.getCardEntryList().forEach(entry -> entry.setDeckGroup(g))));
 
     }
 
     private void saveNewDeck() {
 
-        System.out.println("Card List size: " + saveAbleCardList.size());
-        System.out.println("Entry List size: " + saveAbleCardEntryList.size());
-
-        System.out.println("Starting save");
-
         deckRepository.save(deck);
 
         groupCards();
+
         cardRepository.saveAll(saveAbleCardList);
         deckGroupRepository.saveAll(groupList);
 
-
         cardEntryRepository.saveAll(saveAbleCardEntryList);
+
+        //grouper();
 
         System.out.println("New Deck Size: " + deckRepository.count() +
                 "\nNew Card a Size: " + cardRepository.count() +
                 "\nNew Entry a Size: " + cardEntryRepository.count());
     }
+
 }

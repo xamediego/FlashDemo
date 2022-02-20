@@ -3,10 +3,9 @@ package mai.flash.Controllers;
 import javafx.fxml.FXML;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import mai.flash.Controllers.subcontrollers.FlashCardViewController;
+import mai.flash.Controllers.flashviewcontrollers.FlashCardViewController;
 import mai.flash.view.scene.FxmlParts;
 import mai.flash.view.scene.SceneSwitcher;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

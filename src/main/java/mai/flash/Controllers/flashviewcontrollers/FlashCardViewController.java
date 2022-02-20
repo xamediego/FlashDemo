@@ -1,4 +1,4 @@
-package mai.flash.Controllers.subcontrollers;
+package mai.flash.Controllers.flashviewcontrollers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -6,7 +6,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import mai.flash.Controllers.BadValueStorageClass;
 import mai.flash.domain.Card;
 import mai.flash.logic.Scheduler;
 import mai.flash.repositories.CardEntryRepository;
@@ -42,7 +41,7 @@ public class FlashCardViewController implements Initializable {
     @FXML
     private Button showButton;
     @FXML
-    private HBox flashViewBox;
+    private HBox grFlashBox;
     @FXML
     private Label resetTime;
     @FXML
@@ -71,8 +70,8 @@ public class FlashCardViewController implements Initializable {
         this.currentList = new ArrayList<>();
         this.finishedList = new ArrayList<>();
 
-        this.currentList.addAll(cardRepository.findByDeck_IdAndReviewDateIsLessThanEqual(BadValueStorageClass.getSelectedDeckId(),date));
-        this.currentList.addAll(cardRepository.findByDeck_IdAndCardStatus(BadValueStorageClass.getSelectedDeckId(),"NewLearn"));
+        this.currentList.addAll(cardRepository.findByDeck_IdAndReviewDateIsLessThanEqual(TempDeckVal.getDeck().getId(), date));
+        this.currentList.addAll(cardRepository.findByDeck_IdAndCardStatus(TempDeckVal.getDeck().getId(), "NewLearn"));
 
         keyword.setText(this.currentList.get(0).getKeyValue());
         buttonBox.setVisible(false);
@@ -145,8 +144,8 @@ public class FlashCardViewController implements Initializable {
 
         }else{
             try {
-                HBox displayBox = (HBox)flashViewBox.getParent();
-                displayBox.getChildren().remove(flashViewBox);
+                HBox displayBox = (HBox)grFlashBox.getParent();
+                displayBox.getChildren().remove(grFlashBox);
                 displayBox.getChildren().add(this.sceneSwitcher.getNode(FxmlParts.FLASHMENU));
 
             } catch (IOException e) {

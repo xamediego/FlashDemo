@@ -1,5 +1,7 @@
 package mai.flash.domain;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -60,8 +62,14 @@ public class Card {
         this.cardStatus = cardStatus;
     }
 
-    public void addSubValue(String value){
-        this.cardEntryList.add(new CardEntry(value, this));
+    public Card(Long id, Deck deck, String keyValue, Date reviewDate, String cardStatus, float easinessFactor, int cardInterval) {
+        this.id = id;
+        this.deck = deck;
+        this.keyValue = keyValue;
+        this.reviewDate = reviewDate;
+        this.cardStatus = cardStatus;
+        this.easinessFactor = easinessFactor;
+        this.cardInterval = cardInterval;
     }
 
     public Long getId() {
@@ -86,6 +94,14 @@ public class Card {
 
     public void setCardEntryList(List<CardEntry> cardEntryList) {
         this.cardEntryList = cardEntryList;
+    }
+
+    public DeckGroup getGroup() {
+        return group;
+    }
+
+    public void setGroup(DeckGroup group) {
+        this.group = group;
     }
 
     public String getKeyValue() {
@@ -128,13 +144,6 @@ public class Card {
         this.cardInterval = cardInterval;
     }
 
-    public void resetValues(){
-        this.easinessFactor = (float)2.40;
-        this.cardInterval = 1;
-    }
-
-
-
     public boolean isHardLabel() {
         return hardLabel;
     }
@@ -159,15 +168,15 @@ public class Card {
         this.finishedLabel = finishedLabel;
     }
 
-    public Card(Long id, Deck deck, String keyValue, Date reviewDate, String cardStatus, float easinessFactor, int cardInterval) {
-        this.id = id;
-        this.deck = deck;
-        this.keyValue = keyValue;
-        this.reviewDate = reviewDate;
-        this.cardStatus = cardStatus;
-        this.easinessFactor = easinessFactor;
-        this.cardInterval = cardInterval;
+    public void addSubValue(String value){
+        this.cardEntryList.add(new CardEntry(value, this));
     }
+
+    public void resetValues(){
+        this.easinessFactor = (float)2.40;
+        this.cardInterval = 1;
+    }
+
 
     @Override
     public boolean equals(Object o) {

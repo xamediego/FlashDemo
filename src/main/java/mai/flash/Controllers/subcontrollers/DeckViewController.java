@@ -5,8 +5,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import mai.flash.Controllers.BadValueStorageClass;
+import mai.flash.Controllers.flashviewcontrollers.TempDeckVal;
 import mai.flash.Controllers.MainController;
+import mai.flash.domain.Deck;
 import mai.flash.objects.DeckLine;
 import mai.flash.repositories.DeckRepository;
 import mai.flash.view.scene.FxmlParts;
@@ -38,8 +39,6 @@ public class DeckViewController implements Initializable {
 
     @Autowired
     private DeckRepository deckRepository;
-    @Autowired
-    private MainController mainController;
 
     public DeckViewController(SceneSwitcher sceneSwitcher) {
         this.lineList = new ArrayList();
@@ -56,18 +55,18 @@ public class DeckViewController implements Initializable {
 
     public void createDeckLines(){
 
-        deckRepository.findAll().forEach(deck -> lineList.add(new DeckLine(deck.getName()
+        deckRepository.findAll().forEach(deck -> lineList.add(new DeckLine(
+                deck
                 , deckRepository.getCardStatusSize(deck.getName(), "NewLearn")
-                , deckRepository.getCardStatusDateLessSize(deck.getName(), "Learning", date),
-                deck.getId(), deck.isGrouped())));
+                , deckRepository.getCardStatusDateLessSize(deck.getName(), "Learning", date))));
 
         lineList.forEach(l -> System.out.println(l.toString()));
         lineList.forEach(l -> deckList.getChildren().add(l.getDeckBox()));
 
         lineList.forEach(l -> l.getDeckName().setOnMouseClicked(mouseEvent -> {
             try {
-                setSelectedStatus(l.getDeckName().getText(), l.getId());
-                getFlashView(deckRepository.findById(l.getId()).get().isGrouped());
+                setSelectedStatus(l.getDeck());
+                getFlashView(l.getDeck().isGrouped());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -91,8 +90,7 @@ public class DeckViewController implements Initializable {
     }
 
     //Store these temps somewhere else?
-    public void setSelectedStatus(String selectedDeck, Long deckId){
-        BadValueStorageClass.setSelectedDeckName(selectedDeck);
-        BadValueStorageClass.setSelectedDeckId(deckId);
+    public void setSelectedStatus(Deck deck){
+        TempDeckVal.setDeck(deck);
     }
 }

@@ -9,6 +9,8 @@ import java.sql.Date;
 
 public interface DeckRepository extends CrudRepository<Deck, Long> {
 
+
+
     @Query("select count(d) from Deck d left join d.cardList cardList where d.name = ?1 and cardList.cardStatus = ?2")
     long getCardStatusSize(String name, String cardStatus);
 
@@ -18,10 +20,5 @@ public interface DeckRepository extends CrudRepository<Deck, Long> {
     Deck findByName(String name);
 
     boolean existsByName(String name);
-
-
-
-
-
 
 }

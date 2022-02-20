@@ -1,4 +1,4 @@
-package mai.flash.Controllers.subcontrollers;
+package mai.flash.Controllers.flashviewcontrollers;
 
 import javafx.fxml.FXML;
 
@@ -9,7 +9,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import mai.flash.Controllers.BadValueStorageClass;
 import mai.flash.Controllers.MainController;
 import mai.flash.domain.Card;
 import mai.flash.events.deldeckevent.DeleteDeckEvent;
@@ -74,7 +73,7 @@ public class FlashCardMenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        deckName.setText(BadValueStorageClass.getSelectedDeckName());
+        deckName.setText(TempDeckVal.getDeck().getName());
         setNewCardsNumber();
         setReviewCardsNumber();
         setAmountUnfinishedNew();
@@ -84,7 +83,7 @@ public class FlashCardMenuController implements Initializable {
     @FXML
     private void refreshMenu(){
 
-        if(cardRepository.findByDeck_IdAndCardStatusAndReviewDateIsLessThanEqual(BadValueStorageClass.getSelectedDeckId(),"Learning",date).size() == 0 && cardRepository.findByDeck_IdAndCardStatus(BadValueStorageClass.getSelectedDeckId(),"NewLearn" ).size() == 0){
+        if(cardRepository.findByDeck_IdAndCardStatusAndReviewDateIsLessThanEqual(TempDeckVal.getDeck().getId(), "Learning",date).size() == 0 && cardRepository.findByDeck_IdAndCardStatus(TempDeckVal.getDeck().getId(), "NewLearn" ).size() == 0){
             nameAndButtonBox.getChildren().clear();
             nameAndButtonBox.getChildren().add(new Label("All cards of this deck have been reviewed"));
         }else{
@@ -96,17 +95,17 @@ public class FlashCardMenuController implements Initializable {
 
     @FXML
     private void setNewCardsNumber(){
-        newCardsAmount.setText(String.valueOf(cardRepository.findByDeck_IdAndCardStatus(BadValueStorageClass.getSelectedDeckId(),"NewLearn").size()));
+        newCardsAmount.setText(String.valueOf(cardRepository.findByDeck_IdAndCardStatus(TempDeckVal.getDeck().getId(), "NewLearn").size()));
     }
 
     @FXML
     private void setReviewCardsNumber(){
-        reviewAmount.setText(String.valueOf(cardRepository.findByDeck_IdAndCardStatusAndReviewDateIsLessThanEqual(BadValueStorageClass.getSelectedDeckId(),"Learning",date).size()));
+        reviewAmount.setText(String.valueOf(cardRepository.findByDeck_IdAndCardStatusAndReviewDateIsLessThanEqual(TempDeckVal.getDeck().getId(), "Learning",date).size()));
     }
 
     @FXML
     private void setAmountUnfinishedNew(){
-        amountUnfinishedNew.setText(String.valueOf(cardRepository.findByDeck_IdAndCardStatus(BadValueStorageClass.getSelectedDeckId(),"new").size()));
+        amountUnfinishedNew.setText(String.valueOf(cardRepository.findByDeck_IdAndCardStatus(TempDeckVal.getDeck().getId(), "new").size()));
     }
 
     @FXML
@@ -136,7 +135,7 @@ public class FlashCardMenuController implements Initializable {
     }
 
     private void saveNewCard(){
-        List<Card> newCards = cardRepository.FindPageable_IdAndCardStatus(BadValueStorageClass.getSelectedDeckId(),"new",PageRequest.of(0, Integer.parseInt(newAmountInput.getText())));
+        List<Card> newCards = cardRepository.FindPageable_IdAndCardStatus(TempDeckVal.getDeck().getId(), "new",PageRequest.of(0, Integer.parseInt(newAmountInput.getText())));
         newCards.forEach(c -> c.setCardStatus("NewLearn"));
         cardRepository.saveAll(newCards);
     }
@@ -144,13 +143,17 @@ public class FlashCardMenuController implements Initializable {
     @FXML
     private void getGroupedView() throws IOException {
         if(setGroupedButton.getText().equals("Grouped")) {
+
             studyTypeBox.getChildren().clear();
             studyTypeBox.getChildren().add(sceneSwitcher.getNode(FxmlParts.GROUPDECK));
             setGroupedButton.setText("Singles");
+
         }else{
+
             studyTypeBox.getChildren().clear();
             studyTypeBox.getChildren().add(singlesBox);
             setGroupedButton.setText("Grouped");
+
         }
     }
 
@@ -162,7 +165,7 @@ public class FlashCardMenuController implements Initializable {
         alert.setContentText("Are you sure you want to delete this deck?");
 
         if (alert.showAndWait().get() == ButtonType.OK) {
-            applicationContext.publishEvent(new DeleteDeckEvent(BadValueStorageClass.getSelectedDeckId()));
+            applicationContext.publishEvent(new DeleteDeckEvent(TempDeckVal.getDeck().getId()));
             setClearMenuScreen();
             setDeletedState();
         }
@@ -173,7 +176,7 @@ public class FlashCardMenuController implements Initializable {
     }
 
     private void setDeletedState(){
-        Label deleteDeckLabel = new Label("Deck: " + BadValueStorageClass.getSelectedDeckName() + ", has been deleted");
+        Label deleteDeckLabel = new Label("Deck: " + TempDeckVal.getDeck().getName() + ", has been deleted");
         deleteDeckLabel.setFont(new Font(18));
         mainBox.getChildren().add(deleteDeckLabel);
     }

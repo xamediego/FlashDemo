@@ -4,8 +4,10 @@ import mai.flash.FlashDemo;
 import mai.flash.domain.Card;
 import mai.flash.domain.Deck;
 import mai.flash.events.deldeckevent.DeleteDeckEvent;
-import mai.flash.events.importevent.importEvent;
 import mai.flash.logic.Scheduler;
+import mai.flash.repositories.CardEntryRepository;
+import mai.flash.repositories.CardRepository;
+import mai.flash.repositories.DeckGroupRepository;
 import mai.flash.repositories.DeckRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest(classes = FlashDemo.class)
@@ -26,31 +28,25 @@ class DemoApplicationTests {
     @Autowired
     private DeckRepository deckRepository;
     @Autowired
+    private CardRepository cardRepository;
+    @Autowired
+    private CardEntryRepository cardEntryRepository;
+    @Autowired
+    private DeckGroupRepository deckGroupRepository;
+    @Autowired
     private ApplicationContext context;
 
     @Test
-    public void testImport(){
-
-        String filePath = "C:\\Users\\Maizi\\Documents\\demo\\FlashDemo\\testdata\\TestImportFile.txt";
-        context.publishEvent(new importEvent(filePath, "testAbleDeck"));
-
-        assertTrue(deckRepository.existsByName("testAbleDeck"));
-
-        context.publishEvent(new DeleteDeckEvent(deckRepository.findByName("testAbleDeck").getId()));
-    }
-
-    @Test
-    public void testDelete(){
+    public void testDelete() {
         Deck deleteTestDeck = new Deck();
         deckRepository.save(deleteTestDeck);
 
         context.publishEvent(new DeleteDeckEvent(deleteTestDeck.getId()));
-        assertTrue(!deckRepository.existsByName("testAbleDeck"));
+        assertFalse(deckRepository.existsById(deleteTestDeck.getId()));
     }
 
-
     @Test
-    public void SMTest(){
+    public void SMTest() {
         Card test1 = new Card("Alpha");
         test1.setCardInterval(50);
         Card test2 = new Card("Beta");
@@ -74,12 +70,11 @@ class DemoApplicationTests {
         testCardList.forEach(c -> c.setReviewDate(Date.valueOf(LocalDate.now())));
 
         System.out.println("Hard");
-        testCardList.forEach(c -> c.setReviewDate(Scheduler.getNewSchedule(c,"Hard")));
+        testCardList.forEach(c -> c.setReviewDate(Scheduler.getNewSchedule(c, "Hard")));
         System.out.println("\nGood:");
-        testCardList.forEach(c -> c.setReviewDate(Scheduler.getNewSchedule(c,"Good")));
+        testCardList.forEach(c -> c.setReviewDate(Scheduler.getNewSchedule(c, "Good")));
         System.out.println("\nEasy:");
-        testCardList.forEach(c -> c.setReviewDate(Scheduler.getNewSchedule(c,"Easy")));
-
+        testCardList.forEach(c -> c.setReviewDate(Scheduler.getNewSchedule(c, "Easy")));
     }
 
 }

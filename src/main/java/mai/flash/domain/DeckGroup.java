@@ -1,5 +1,7 @@
 package mai.flash.domain;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -13,6 +15,12 @@ public class DeckGroup {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private boolean alreadyStarted;
+
+    private int groupInterval;
+
+    private Date groupDate;
+
     //vals for smaller sub tests, for normal study the values in the parent deck are used
     private double punishmentFactor;
     private double easyMultiplier;
@@ -21,11 +29,17 @@ public class DeckGroup {
     private Date reviewDate;
 
     @OneToMany
-    @JoinColumn(name = "deckgroup_id")
+    @JoinColumn(name = "group_id")
     private List<Card> cardList;
+
+    @OneToMany
+    @JoinColumn
+    private List<CardEntry> cardEntryList;
 
     @ManyToOne
     private Deck deck;
+
+    private int groupNumber;
 
     public DeckGroup() {
         this.cardList = new ArrayList<>();
@@ -44,28 +58,12 @@ public class DeckGroup {
         this.id = id;
     }
 
-    public List<Card> getCardList() {
-        return cardList;
+    public boolean isAlreadyStarted() {
+        return alreadyStarted;
     }
 
-    public void setCardList(List<Card> cardList) {
-        this.cardList = cardList;
-    }
-
-    public Date getReviewDate() {
-        return reviewDate;
-    }
-
-    public void setReviewDate(Date reviewDate) {
-        this.reviewDate = reviewDate;
-    }
-
-    public Deck getDeck() {
-        return deck;
-    }
-
-    public void setDeck(Deck deck) {
-        this.deck = deck;
+    public void setAlreadyStarted(boolean alreadyStarted) {
+        this.alreadyStarted = alreadyStarted;
     }
 
     public double getPunishmentFactor() {
@@ -92,16 +90,60 @@ public class DeckGroup {
         this.goodMultiplier = goodMultiplier;
     }
 
-    @Override
-    public String toString() {
-        return "Group{" +
-                "id=" + id +
-                ", punishmentFactor=" + punishmentFactor +
-                ", easyMultiplier=" + easyMultiplier +
-                ", goodMultiplier=" + goodMultiplier +
-                ", reviewDate=" + reviewDate +
-                ", deck=" + deck +
-                '}';
+    public Date getReviewDate() {
+        return reviewDate;
+    }
+
+    public void setReviewDate(Date reviewDate) {
+        this.reviewDate = reviewDate;
+    }
+
+    public List<Card> getCardList() {
+        return cardList;
+    }
+
+    public void setCardList(List<Card> cardList) {
+        this.cardList = cardList;
+    }
+
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public void setDeck(Deck deck) {
+        this.deck = deck;
+    }
+
+    public int getGroupNumber() {
+        return groupNumber;
+    }
+
+    public void setGroupNumber(int groupNumber) {
+        this.groupNumber = groupNumber;
+    }
+
+    public int getGroupInterval() {
+        return groupInterval;
+    }
+
+    public void setGroupInterval(int groupInterval) {
+        this.groupInterval = groupInterval;
+    }
+
+    public Date getGroupDate() {
+        return groupDate;
+    }
+
+    public void setGroupDate(Date groupDate) {
+        this.groupDate = groupDate;
+    }
+
+    public List<CardEntry> getCardEntryList() {
+        return cardEntryList;
+    }
+
+    public void setCardEntryList(List<CardEntry> cardEntryList) {
+        this.cardEntryList = cardEntryList;
     }
 
     @Override

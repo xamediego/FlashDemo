@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane fx:id="menuPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mai.flash.Controllers.subcontrollers.GroupMenuController">
+<GridPane fx:id="menuPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mai.flash.Controllers.flashviewcontrollers.GroupMenuController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -16,7 +16,7 @@
    <children>
       <VBox alignment="CENTER" prefHeight="500.0" prefWidth="575.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#startStudy" text="Start Study" />
+            <Button fx:id="startStudyButton" mnemonicParsing="false" onAction="#startStudy" text="Start Study" />
          </children></VBox>
    </children>
 </GridPane>

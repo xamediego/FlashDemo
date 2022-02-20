@@ -1,5 +1,7 @@
 package mai.flash.domain;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,6 @@ public class Deck {
     private List<Card> cardList;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "deck_id")
     private List<DeckGroup> groupList;
 
     private boolean grouped = false;
@@ -30,15 +31,17 @@ public class Deck {
 
     public Deck() {
         this.cardList = new ArrayList<>();
+        this.groupList = new ArrayList<>();
     }
 
     public Deck(String name) {
+        this();
         this.name = name;
-        this.cardList = new ArrayList<>();
     }
 
     public Deck(List<Card> cardList, String name) {
         this.cardList = cardList;
+        this.groupList = new ArrayList<>();
         this.name = name;
     }
 
@@ -46,8 +49,32 @@ public class Deck {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public List<Card> getCardList() {
         return cardList;
+    }
+
+    public void setCardList(List<Card> cardList) {
+        this.cardList = cardList;
+    }
+
+    public List<DeckGroup> getGroupList() {
+        return groupList;
+    }
+
+    public void setGroupList(List<DeckGroup> groupList) {
+        this.groupList = groupList;
+    }
+
+    public boolean isGrouped() {
+        return grouped;
+    }
+
+    public void setGrouped(boolean grouped) {
+        this.grouped = grouped;
     }
 
     public String getName() {
@@ -80,14 +107,6 @@ public class Deck {
 
     public void setGoodMultiplier(double goodMultiplier) {
         this.goodMultiplier = goodMultiplier;
-    }
-
-    public boolean isGrouped() {
-        return grouped;
-    }
-
-    public void setGrouped(boolean grouped) {
-        this.grouped = grouped;
     }
 
     @Override
